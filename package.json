@@ -10,7 +10,7 @@
     "lint": " eslint app.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Venera Nechaeva",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",

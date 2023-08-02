@@ -1,23 +1,31 @@
+const utils = require('./utils');
+
 const Card = require('../models/card');
+
+const errMessgesDict = {
+  [utils.ERROR_INCORRECT_DATA]: 'Переданы некорректные данные.',
+  [utils.ERROR_NOT_FOUND]: 'Карточка не найдена.',
+  [utils.ERROR_DEFAULT]: 'На сервере произошла ошибка.',
+};
 
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send({ data: cards }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
 module.exports.createCard = (req, res) => {
   const { name, link, owner } = req.body;
   Card.create({ name, link, owner })
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(400).send({ message: `${err} Произошла ошибка при создании новй карточки` }));
+    .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(500).send({ message: `${err} Произошла ошибка` }));
+    .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
 /// /// ///
@@ -29,7 +37,7 @@ module.exports.likeCard = (req, res) => {
     { new: true },
   )
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(500).send({ message: `${err} Произошла ошибка` }));
+    .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
 module.exports.dislikeCard = (req, res) => {
@@ -40,5 +48,5 @@ module.exports.dislikeCard = (req, res) => {
     { new: true },
   )
     .then((card) => res.send({ data: card }))
-    .catch((err) => res.status(500).send({ message: `${err} Произошла ошибка` }));
+    .catch((err) => utils.processError(err, res, errMessgesDict));
 };

@@ -6,8 +6,10 @@ const mongoose = require('mongoose');
 
 const bodyParser = require('body-parser');
 
+// Импорт мидлвэра
+// const { doesUserExist } = require('./controllers/utils');
+
 // Импортируем роутеры
-// const router = require('./routes/users');
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 
@@ -20,10 +22,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use('/', router); // запускаем
-app.use('/', routerUser); // запускаем
-app.use('/', routerCard); // запускаем
-
 // Временное решение авторизации
 app.use((req, res, next) => {
   req.user = {
@@ -32,6 +30,11 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// app.use(doesUserExist);
+
+app.use('/', routerUser); // запускаем
+app.use('/', routerCard); // запускаем
 
 // Подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {

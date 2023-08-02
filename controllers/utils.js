@@ -19,7 +19,7 @@ const processError = (err, res, errMessges) => {
 // Функция проверки данных ответа
 const checkNonEmptyData = (data, res, errMessges) => {
   if (data === null) {
-    res.status(ERROR_INCORRECT_DATA).send({ message: errMessges[ERROR_INCORRECT_DATA] });
+    res.status(ERROR_NOT_FOUND).send({ message: errMessges[ERROR_NOT_FOUND] });
   } else res.send({ data });
 };
 

@@ -18,7 +18,7 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
+    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict, utils.ERROR_INCORRECT_DATA))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 

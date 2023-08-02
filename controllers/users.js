@@ -31,8 +31,8 @@ module.exports.createUser = (req, res) => {
 
 /// /// ///
 module.exports.updateUser = (req, res) => {
-  const { name, about } = req.body;
-  User.findByIdAndUpdate({ name, about }, { new: true, runValidators: true })
+  const { name, about, _id } = req.body;
+  User.findByIdAndUpdate(_id, { name, about }, { new: true, runValidators: true })
     .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };

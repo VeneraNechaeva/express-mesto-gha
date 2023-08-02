@@ -8,8 +8,6 @@ const bodyParser = require('body-parser');
 
 const utils = require('./controllers/utils');
 const User = require('./models/user');
-// Импорт мидлвэра
-// const { doesUserExist } = require('./controllers/utils');
 
 // Импортируем роутеры
 const routerUser = require('./routes/users');
@@ -33,11 +31,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use(doesUserExist);
-
 app.use('/', routerUser); // запускаем
 app.use('/', routerCard); // запускаем
-app.use(utils.checkIncorrectPath);
+app.use(utils.checkIncorrectPath); // запускаем обработку неправильного пути
 
 // Подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {

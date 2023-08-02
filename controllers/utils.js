@@ -3,7 +3,7 @@ const ERROR_INCORRECT_DATA = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_DEFAULT = 500;
 
-// // Словарь соответствия ошибок и кодов по умолчанию
+// Словарь соответствия ошибок и кодов по умолчанию
 const defaultErrNameToCodeDict = {
   CastError: ERROR_NOT_FOUND,
   ValidationError: ERROR_INCORRECT_DATA,
@@ -36,21 +36,7 @@ const checkIncorrectPath = (req, res, next) => {
   next();
 };
 
-// // Импортируем модель User
-// const User = require('../models/user');
-
-// // Проверяем, существует ли пользователь (функция мидлвэр)
-// const doesUserExist = (req, res, next) => {
-//   if (!User[req.params._id]) {
-//     res.send('Такого пользователя не существует');
-//     return;
-//   }
-
-//   next(); // вызываем next
-// };
-
 module.exports = {
-  // doesUserExist,
   checkIncorrectPath,
   checkNonEmptyData,
   processError,

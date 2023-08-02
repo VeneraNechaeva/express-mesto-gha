@@ -37,7 +37,7 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: owner } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .then((card) => res.send({ data: card }))
+    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 

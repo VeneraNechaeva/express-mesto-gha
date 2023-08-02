@@ -23,13 +23,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Временное решение авторизации
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64c8b44d8a7bf83527ca2fd2',
-  };
-
-  next();
-});
+// app.use((req, res, next) => {
+//   req.user = {
+//     _id: '64c8b44d8a7bf83527ca2fd2',
+//   };
+//   next();
+// });
 
 // app.use(doesUserExist);
 

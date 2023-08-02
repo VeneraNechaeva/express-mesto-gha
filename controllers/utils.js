@@ -7,9 +7,9 @@ const ERROR_DEFAULT = 500;
 const processError = (err, res, errMessges) => {
   console.log(err);
 
-  if (err.name === 'CastError') {
+  if (err.name === 'ValidationError') {
     res.status(ERROR_NOT_FOUND).send({ message: errMessges[ERROR_NOT_FOUND] });
-  } else if (err.name === 'ValidationError') {
+  } else if (err.name === 'CastError') {
     res.status(ERROR_INCORRECT_DATA).send({ message: errMessges[ERROR_INCORRECT_DATA] });
   } else {
     res.status(ERROR_DEFAULT).send({ message: errMessges[ERROR_DEFAULT] });

@@ -18,7 +18,7 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => res.send({ data: user }))
+    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
@@ -33,13 +33,13 @@ module.exports.createUser = (req, res) => {
 module.exports.updateUser = (req, res) => {
   const { name, about, _id } = req.body;
   User.findByIdAndUpdate(_id, { name, about }, { new: true, runValidators: true })
-    .then((user) => res.send({ data: user }))
+    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
 module.exports.updateUserAvatar = (req, res) => {
   const { avatar, _id } = req.body;
   User.findByIdAndUpdate(_id, { avatar }, { new: true, runValidators: true })
-    .then((user) => res.send({ data: user }))
+    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };

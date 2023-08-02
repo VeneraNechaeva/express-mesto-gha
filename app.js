@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   const getFirstUser = User.find({})[0];
   req.user = {
-    _id: getFirstUser._id, // '64c8b44d8a7bf83527ca2fd2',
+    _id: getFirstUser._id ? getFirstUser !== undefined : '64c8b44d8a7bf83527ca2fd2',
   };
   next();
 });

@@ -3,14 +3,20 @@ const ERROR_INCORRECT_DATA = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_DEFAULT = 500;
 
+const defaultErrNameToCodeDict = {
+  CastError: ERROR_NOT_FOUND,
+  ValidationError: ERROR_INCORRECT_DATA,
+};
+
 // Функция обработки ошибок
-const processError = (err, res, errMessges) => {
+const processError = (err, res, errMessges, errNameToCodeDict = defaultErrNameToCodeDict) => {
   console.log(err);
+  const errCode = errNameToCodeDict[err.name];
 
   if (err.name === 'CastError') {
-    res.status(ERROR_NOT_FOUND).send({ message: errMessges[ERROR_NOT_FOUND] });
+    res.status(errCode).send({ message: errMessges[errCode] });
   } else if (err.name === 'ValidationError') {
-    res.status(ERROR_INCORRECT_DATA).send({ message: errMessges[ERROR_INCORRECT_DATA] });
+    res.status(errCode).send({ message: errMessges[errCode] });
   } else {
     res.status(ERROR_DEFAULT).send({ message: errMessges[ERROR_DEFAULT] });
   }

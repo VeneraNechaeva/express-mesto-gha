@@ -9,6 +9,11 @@ const errMessgesDict = {
   [utils.ERROR_DEFAULT]: 'На сервере произошла ошибка.',
 };
 
+const errNameToCodeDict = {
+  CastError: utils.ERROR_INCORRECT_DATA,
+  ValidationError: utils.ERROR_NOT_FOUND,
+};
+
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => res.send({ data: users }))
@@ -18,8 +23,8 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUserById = (req, res) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict, utils.ERROR_NOT_FOUND))
-    .catch((err) => utils.processError(err, res, errMessgesDict));
+    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
+    .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
 };
 
 module.exports.createUser = (req, res) => {

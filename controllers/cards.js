@@ -25,7 +25,7 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
-    .then((card) => res.send({ data: card }))
+    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 

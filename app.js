@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const utils = require('./controllers/utils');
-
+const User = require('./models/user');
 // Импорт мидлвэра
 // const { doesUserExist } = require('./controllers/utils');
 
@@ -26,8 +26,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Временное решение авторизации
 app.use((req, res, next) => {
+  const getFirstUser = User.find({})[0];
   req.user = {
-    _id: '64c8b44d8a7bf83527ca2fd2',
+    _id: getFirstUser._id, // '64c8b44d8a7bf83527ca2fd2',
   };
   next();
 });

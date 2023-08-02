@@ -25,7 +25,7 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   Card.findByIdAndRemove(cardId)
-    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict, utils.ERROR_INCORRECT_DATA))
+    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict, utils.ERROR_NOT_FOUND))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
@@ -37,7 +37,7 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: owner } }, // добавить _id в массив, если его там нет
     { new: true },
   )
-    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict, utils.ERROR_INCORRECT_DATA))
+    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict, utils.ERROR_NOT_FOUND))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 
@@ -48,6 +48,6 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: owner } }, // убрать _id из массива
     { new: true },
   )
-    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict, utils.ERROR_INCORRECT_DATA))
+    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict, utils.ERROR_NOT_FOUND))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };

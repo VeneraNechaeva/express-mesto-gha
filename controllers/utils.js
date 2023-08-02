@@ -23,6 +23,12 @@ const checkNonEmptyData = (data, res, errMessges) => {
   } else res.send({ data });
 };
 
+// Обработка неправильного пути
+const checkIncorrectPath = (req, res, next) => {
+  res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена!' });
+  next();
+};
+
 // // Импортируем модель User
 // const User = require('../models/user');
 
@@ -38,6 +44,7 @@ const checkNonEmptyData = (data, res, errMessges) => {
 
 module.exports = {
   // doesUserExist,
+  checkIncorrectPath,
   checkNonEmptyData,
   processError,
   ERROR_INCORRECT_DATA,

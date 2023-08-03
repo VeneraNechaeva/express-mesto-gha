@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('../utils/utils');
 
 const Card = require('../models/card');
 
@@ -23,7 +23,7 @@ module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(utils.CREATE_SUCCESS).send({ data: card }))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 

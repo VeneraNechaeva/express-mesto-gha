@@ -1,4 +1,4 @@
-const utils = require('./utils');
+const utils = require('../utils/utils');
 
 const User = require('../models/user');
 
@@ -31,7 +31,7 @@ module.exports.getUserById = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
 

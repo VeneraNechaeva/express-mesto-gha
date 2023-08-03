@@ -2,6 +2,7 @@
 const ERROR_INCORRECT_DATA = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_DEFAULT = 500;
+const CREATE_SUCCESS = 201;
 
 // Словарь соответствия ошибок и кодов по умолчанию
 const defaultErrNameToCodeDict = {
@@ -17,7 +18,7 @@ const processError = (err, res, errMessges, errNameToCodeDict = defaultErrNameTo
   if (err.name === 'CastError') {
     res.status(errCode).send({ message: errMessges[errCode] });
   } else if (err.name === 'ValidationError') {
-    res.status(errCode).send({ message: errMessges[errCode] });
+    res.status(errCode).send({ message: `${errMessges[errCode]} ${err.message}` });
   } else {
     res.status(ERROR_DEFAULT).send({ message: errMessges[ERROR_DEFAULT] });
   }
@@ -43,4 +44,5 @@ module.exports = {
   ERROR_INCORRECT_DATA,
   ERROR_NOT_FOUND,
   ERROR_DEFAULT,
+  CREATE_SUCCESS,
 };

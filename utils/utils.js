@@ -3,6 +3,7 @@ const ERROR_INCORRECT_DATA = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_DEFAULT = 500;
 const CREATE_SUCCESS = 201;
+const ERROR_INCORRECT_LOGIN_OR_PASSWORD = 401;
 
 // Словарь соответствия ошибок и кодов по умолчанию
 const defaultErrNameToCodeDict = {
@@ -45,4 +46,5 @@ module.exports = {
   ERROR_NOT_FOUND,
   ERROR_DEFAULT,
   CREATE_SUCCESS,
+  ERROR_INCORRECT_LOGIN_OR_PASSWORD,
 };

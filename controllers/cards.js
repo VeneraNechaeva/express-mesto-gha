@@ -29,8 +29,19 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
-  Card.findByIdAndRemove(cardId)
-    .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict))
+  const userId = req.user._id;
+
+  Card.findById(cardId)
+    // eslint-disable-next-line consistent-return
+    .then((card) => {
+      if (card.owner.toString() === userId) {
+        Card.findByIdAndRemove(cardId)
+          .then((cardAfterDel) => utils.checkNonEmptyData(cardAfterDel, res, errMessgesDict))
+          .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
+      } else {
+        return Promise.reject(new Error('Нельзя удалять чужие карточки!'));
+      }
+    })
     .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
 };
 

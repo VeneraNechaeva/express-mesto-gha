@@ -92,31 +92,9 @@ module.exports.login = (req, res) => {
 };
 
 // Контроллер для получения информации о текущем пользователе
-/// ////////////////////////////////////////////////////////
-/// ////////////////////////////////////////////////////////
 module.exports.getCurrentUser = (req, res) => {
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
-  User.findOne(name, about, avatar, email, password)
-
-    .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
-    .catch((err) => utils.processError(err, res, errMessgesDict));
+  const userId = req.user._id;
+  User.findById(userId)
+    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
+    .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
 };
-
-// module.exports.getCurrentUser = (req, res) => {
-//   const { userId } = req.params;
-//   User.findById(userId)
-//     .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
-//     .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
-// };
-
-// module.exports.getCurrentUser = (req, res) => {
-//   const {
-//     email, password,
-//   } = req.body;
-//   User.findOne(email, password)
-
-//     .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
-//     .catch((err) => utils.processError(err, res, errMessgesDict));
-// };

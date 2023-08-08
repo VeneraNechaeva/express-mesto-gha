@@ -1,4 +1,8 @@
 const mongoose = require('mongoose');
+
+// Импортируем модуль bcrypt для хеширования пароля
+const bcrypt = require('bcryptjs');
+
 const validator = require('validator');
 
 // Создаём схему
@@ -34,10 +38,37 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    select: false,
     required: [true, 'Поле "password" должно быть заполнено'],
     minlength: [8, 'Минимальная длина поля "password" - 8'],
   },
 }, { versionKey: false });
+
+// Добавим собственный метод findUserByCredentials схеме пользователя
+// eslint-disable-next-line func-names
+userSchema.statics.findUserByCredentials = function (email, password) {
+  // проверяем есть ли пользователь в базе с указанной почтой
+  return this.findOne({ email }).select('+password') // this — это модель User
+    // eslint-disable-next-line consistent-return
+    .then((user) => {
+      // пользователь не найден — отклоняем промис
+      // с ошибкой и переходим в блок catch
+      if (!user) {
+        console.log('not find user');
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+
+      // нашёлся — сравниваем хеши
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            // хеши не совпали — отклоняем промис
+            return Promise.reject(new Error('Неправильные почта или пароль'));
+          }
+          return user;
+        });
+    });
+};
 
 // Создаём модель и экспортируем её
 module.exports = mongoose.model('user', userSchema);

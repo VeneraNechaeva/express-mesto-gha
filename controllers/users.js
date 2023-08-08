@@ -1,6 +1,9 @@
 // Импортируем модуль bcrypt для хеширования пароля
 const bcrypt = require('bcryptjs');
 
+// Импортируем модуль jsonwebtoken для создания токенов
+const jwt = require('jsonwebtoken');
+
 const utils = require('../utils/utils');
 
 const User = require('../models/user');
@@ -68,32 +71,52 @@ module.exports.updateUserAvatar = (req, res) => {
 // Создаём контроллер аутентификации
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
-
-  User.findOne({ email })
+  User.findUserByCredentials(email, password)
     .then((user) => {
-      // проверяем есть ли пользователь в базе с указанной почтой
-      if (!user) {
-        // пользователь не найден — отклоняем промис
-        // с ошибкой и переходим в блок catch
-        return Promise.reject(new Error('Неправильные почта или пароль'));
-      }
+      // создадим токен
+      console.log('login!', user);
+      const token = jwt.sign(
+        { _id: user._id },
+        'some-secret-key',
+        { expiresIn: '7d' }, // токен будет просрочен через неделю
+      );
 
-      // сравниваем переданный пароль и хеш из базы
-      return bcrypt.compare(password, user.password);
+      // вернём токен
+      res.send({ token });
     })
+    .catch((err) => {
+      res
+        .status(401)
+        .send({ message: err.message });
+    });
+};
 
-    // Если пользователь найден, сверяет хеш его пароля;
-    // Проверяем совпали ли хеши
-    // eslint-disable-next-line consistent-return
-    .then((matched) => {
-      if (!matched) {
-        // хеши не совпали — отклоняем промис
-        return Promise.reject(new Error('Неправильные почта или пароль'));
-      }
+// Контроллер для получения информации о текущем пользователе
+/// ////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////
+module.exports.getCurrentUser = (req, res) => {
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  User.findOne(name, about, avatar, email, password)
 
-      // аутентификация успешна
-      res.send({ message: 'Всё верно!' });
-    })
-
+    .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
     .catch((err) => utils.processError(err, res, errMessgesDict));
 };
+
+// module.exports.getCurrentUser = (req, res) => {
+//   const { userId } = req.params;
+//   User.findById(userId)
+//     .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
+//     .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
+// };
+
+// module.exports.getCurrentUser = (req, res) => {
+//   const {
+//     email, password,
+//   } = req.body;
+//   User.findOne(email, password)
+
+//     .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
+//     .catch((err) => utils.processError(err, res, errMessgesDict));
+// };

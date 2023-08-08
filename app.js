@@ -10,8 +10,10 @@ const bodyParser = require('body-parser');
 // уязвимостей и кибератак
 const helmet = require('helmet');
 
+const { createUser, login } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+
 const utils = require('./utils/utils');
-const User = require('./models/user');
 
 // Импортируем роутеры
 const routerUser = require('./routes/users');
@@ -28,14 +30,12 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Временное решение авторизации
-app.use((req, res, next) => {
-  const getFirstUser = User.find({})[0];
-  req.user = {
-    _id: getFirstUser === undefined ? '64c8b44d8a7bf83527ca2fd2' : getFirstUser._id,
-  };
-  next();
-});
+// Роуты для логина и регистрации
+app.post('/signin', login);
+app.post('/signup', createUser);
+
+// Авторизация (Защищаем роуты авторизацией)
+app.use(auth);
 
 app.use('/', routerUser); // запускаем
 app.use('/', routerCard); // запускаем

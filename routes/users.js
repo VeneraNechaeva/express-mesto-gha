@@ -5,13 +5,13 @@ const router = require('express').Router();
 // Импорт контроллеров
 const {
   getUsers, getUserById, updateUser, updateUserAvatar, getCurrentUser,
-} = require('../validators/user_validator');
+} = require('../controllers/users');
 
 // Импорт валидаторов запросов
 const {
   getCurrentUserValidator, getUsersValidator, getUserByIdValidator,
   updateUserValidator, updateUserAvatarValidator,
-} = require('../controllers/users');
+} = require('../validators/user_validator');
 
 /// /// /// Роут для получения информации о текущем пользователе
 router.get('/users/me', getCurrentUserValidator, getCurrentUser);

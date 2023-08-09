@@ -53,7 +53,7 @@ module.exports.updateUserValidator = celebrate({
 module.exports.updateUserAvatarValidator = celebrate({
   body: Joi.object().keys({
     _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
-    avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/gi),
+    avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
   }),
 
   headers: Joi.object().keys({
@@ -72,7 +72,7 @@ module.exports.createUserValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/gi),
+    avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),

@@ -9,13 +9,13 @@ module.exports.getCurrentUserValidator = celebrate({
 
 module.exports.getUserByIdValidator = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    userId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
   }),
 });
 
 module.exports.updateUserValidator = celebrate({
   body: Joi.object().keys({
-    _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    userId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
   }),
@@ -23,7 +23,7 @@ module.exports.updateUserValidator = celebrate({
 
 module.exports.updateUserAvatarValidator = celebrate({
   body: Joi.object().keys({
-    _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    userId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
     avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
   }),
 });

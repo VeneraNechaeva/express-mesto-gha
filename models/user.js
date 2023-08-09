@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs');
 
 const validator = require('validator');
 
+const utils = require('../utils/utils');
+
 // Создаём схему
 const userSchema = new mongoose.Schema({
   name: {
@@ -55,7 +57,6 @@ userSchema.statics.findUserByCredentials = function (email, password) {
       // пользователь не найден — отклоняем промис
       // с ошибкой и переходим в блок catch
       if (!user) {
-        console.log('not find user');
         return Promise.reject(new Error('Неправильные почта или пароль'));
       }
 

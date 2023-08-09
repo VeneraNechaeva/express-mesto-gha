@@ -19,7 +19,7 @@ const User = require('../models/user');
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.status(utils.CREATE_SUCCESS).send({ data: users });
+      res.send({ data: users });
     })
     .catch(next);
 };
@@ -31,7 +31,7 @@ module.exports.getUserById = (req, res, next) => {
       if (!user) {
         throw new utils.NotFoundError('Пользователь не найден.');
       }
-      res.status(utils.CREATE_SUCCESS).send(user);
+      res.send(user);
     })
     .catch(next);
 };
@@ -41,13 +41,24 @@ module.exports.createUser = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  // Хешируем пароль
-  bcrypt.hash(password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash, // записываем хеш в базу
-    }))
-
-    .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
+  // Проверяем существует ли пользователь с таким email
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new utils.ERROR_EXISTS_EMAIL('С таким email пользователь уже существует.');
+      }
+    }).then(() => {
+      // Хешируем пароль
+      bcrypt.hash(password, 10)
+        .then((hash) => User.create({
+          name, about, avatar, email, password: hash, // записываем хеш в базу
+        }))
+        .then((user) => {
+          // eslint-disable-next-line no-param-reassign
+          delete user.password;
+          res.status(utils.CREATE_SUCCESS).send({ data: user });
+        });
+    })
     .catch(next);
 };
 
@@ -60,7 +71,7 @@ module.exports.updateUser = (req, res, next) => {
       if (!user) {
         throw new utils.NotFoundError('Пользователь не найден.');
       }
-      res.status(utils.CREATE_SUCCESS).send(user);
+      res.send(user);
     })
     .catch(next);
 };
@@ -73,7 +84,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
       if (!user) {
         throw new utils.NotFoundError('Пользователь не найден.');
       }
-      res.status(utils.CREATE_SUCCESS).send(user);
+      res.send(user);
     })
     .catch(next);
 };
@@ -84,6 +95,9 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
+      if (!user) {
+        throw new utils.IncorrectAuthorizationError(' Передан неверный логин или пароль.');
+      }
       // создадим токен
       const token = jwt.sign(
         { _id: user._id },
@@ -105,7 +119,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         throw new utils.NotFoundError('Пользователь не найден.');
       }
-      res.status(utils.CREATE_SUCCESS).send(user);
+      res.send(user);
     })
     .catch(next);
 };

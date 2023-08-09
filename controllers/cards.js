@@ -2,17 +2,6 @@ const utils = require('../utils/utils');
 
 const Card = require('../models/card');
 
-// const errMessgesDict = {
-//   [utils.ERROR_INCORRECT_DATA]: 'Переданы некорректные данные.',
-//   [utils.ERROR_NOT_FOUND]: 'Карточка не найдена.',
-//   [utils.ERROR_DEFAULT]: 'На сервере произошла ошибка.',
-// };
-
-// const errNameToCodeDict = {
-//   CastError: utils.ERROR_INCORRECT_DATA,
-//   ValidationError: utils.ERROR_NOT_FOUND,
-// };
-
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
@@ -25,7 +14,7 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.status(utils.CREATE_SUCCESS).send({ data: card }))
+    .then((card) => res.send({ data: card }))
     .catch(next);
 };
 
@@ -41,10 +30,10 @@ module.exports.deleteCard = (req, res, next) => {
       }
       if (card.owner.toString() === userId) {
         Card.findByIdAndRemove(cardId)
-          .then((cardAfterDel) => res.status(utils.CREATE_SUCCESS).send(cardAfterDel))
+          .then((cardAfterDel) => res.send(cardAfterDel))
           .catch((err) => Promise.reject(err));
       } else {
-        return Promise.reject(new Error('Нельзя удалять чужие карточки!'));
+        return Promise.reject(new utils.DeleteCardError('Нельзя удалять чужие карточки!'));
       }
     })
     .catch(next);
@@ -78,7 +67,7 @@ module.exports.dislikeCard = (req, res, next) => {
       if (!card) {
         throw new utils.NotFoundError('Карточка не найденa.');
       }
-      res.status(utils.CREATE_SUCCESS).send(card);
+      res.send(card);
     })
     .catch(next);
 };

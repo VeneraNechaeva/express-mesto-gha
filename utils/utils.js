@@ -1,9 +1,49 @@
+/* eslint-disable max-classes-per-file */
+
 // Ошибки
 const ERROR_INCORRECT_DATA = 400;
 const ERROR_NOT_FOUND = 404;
 const ERROR_DEFAULT = 500;
 const CREATE_SUCCESS = 201;
 const ERROR_INCORRECT_LOGIN_OR_PASSWORD = 401;
+const ERROR_DELETE_CARD = 403;
+const ERROR_EXISTS_EMAIL = 409;
+
+// Собственные конструкторы ошибок
+class IncorrectDataError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = ERROR_INCORRECT_DATA; // Переданы некорректные данные.
+  }
+}
+
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = ERROR_NOT_FOUND; // Пользователь/ карточка не найдена.
+  }
+}
+
+class IncorrectAuthorizationError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = ERROR_INCORRECT_LOGIN_OR_PASSWORD; // Передан неверный логин или пароль
+  }
+}
+
+class DeleteCardError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 403; // Попытка удалить чужую карточку
+  }
+}
+
+class existsEmailError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 409; // При регистрации указан email, который уже существует на сервере.
+  }
+}
 
 // Словарь соответствия ошибок и кодов по умолчанию
 const defaultErrNameToCodeDict = {
@@ -39,6 +79,11 @@ const checkIncorrectPath = (req, res, next) => {
 };
 
 module.exports = {
+  IncorrectDataError,
+  NotFoundError,
+  IncorrectAuthorizationError,
+  DeleteCardError,
+  existsEmailError,
   checkIncorrectPath,
   checkNonEmptyData,
   processError,
@@ -47,4 +92,6 @@ module.exports = {
   ERROR_DEFAULT,
   CREATE_SUCCESS,
   ERROR_INCORRECT_LOGIN_OR_PASSWORD,
+  ERROR_DELETE_CARD,
+  ERROR_EXISTS_EMAIL,
 };

@@ -58,6 +58,7 @@ app.use(utils.checkIncorrectPath); // запускаем обработку не
 // Обработчик ошибок celebrate
 app.use(errors());
 
+// ////////////////////////////////////////////////////////////////////////////
 // Централизованная обработка ошибок
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {

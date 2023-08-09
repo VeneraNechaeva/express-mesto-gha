@@ -8,27 +8,18 @@ const utils = require('../utils/utils');
 
 const User = require('../models/user');
 
-// Словарь описания ошибок
-const errMessgesDict = {
-  [utils.ERROR_INCORRECT_DATA]: 'Переданы некорректные данные.',
-  [utils.ERROR_NOT_FOUND]: 'Пользователь не найден.',
-  [utils.ERROR_DEFAULT]: 'На сервере произошла ошибка.',
-  [utils.ERROR_INCORRECT_LOGIN_OR_PASSWORD]: 'Неверный логин или пароль.',
-};
-
-// Словарь соответствия ошибок и кодов
-const errNameToCodeDict = {
-  CastError: utils.ERROR_INCORRECT_DATA,
-  ValidationError: utils.ERROR_NOT_FOUND,
-};
+// // Словарь описания ошибок
+// const errMessgesDict = {
+//   [utils.ERROR_INCORRECT_DATA]: 'Переданы некорректные данные.',
+//   [utils.ERROR_NOT_FOUND]: 'Пользователь не найден.',
+//   [utils.ERROR_DEFAULT]: 'На сервере произошла ошибка.',
+//   [utils.ERROR_INCORRECT_LOGIN_OR_PASSWORD]: 'Неверный логин или пароль.',
+// };
 
 module.exports.getUsers = (req, res, next) => {
-  // User.find({})
-  //   .then((users) => res.send({ data: users }))
-  //   .catch((err) => utils.processError(err, res, errMessgesDict));
   User.find({})
     .then((users) => {
-      res.send({ data: users });
+      res.status(utils.CREATE_SUCCESS).send({ data: users });
     })
     .catch(next);
 };
@@ -38,14 +29,14 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
+        throw new utils.NotFoundError('Пользователь не найден.');
       }
-      res.send(user);
+      res.status(utils.CREATE_SUCCESS).send(user);
     })
     .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -57,34 +48,43 @@ module.exports.createUser = (req, res) => {
     }))
 
     .then((user) => res.status(utils.CREATE_SUCCESS).send({ data: user }))
-    .catch((err) => utils.processError(err, res, errMessgesDict));
+    .catch(next);
 };
 
 /// /// ///
-module.exports.updateUser = (req, res) => {
+module.exports.updateUser = (req, res, next) => {
   const userId = req.user._id;
   const { name, about } = req.body;
   User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
-    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
-    .catch((err) => utils.processError(err, res, errMessgesDict));
+    .then((user) => {
+      if (!user) {
+        throw new utils.NotFoundError('Пользователь не найден.');
+      }
+      res.status(utils.CREATE_SUCCESS).send(user);
+    })
+    .catch(next);
 };
 
-module.exports.updateUserAvatar = (req, res) => {
+module.exports.updateUserAvatar = (req, res, next) => {
   const userId = req.user._id;
   const { avatar } = req.body;
   User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
-    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
-    .catch((err) => utils.processError(err, res, errMessgesDict));
+    .then((user) => {
+      if (!user) {
+        throw new utils.NotFoundError('Пользователь не найден.');
+      }
+      res.status(utils.CREATE_SUCCESS).send(user);
+    })
+    .catch(next);
 };
 
 /// /// ///
 // Создаём контроллер аутентификации
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
       // создадим токен
-      console.log('login!', user);
       const token = jwt.sign(
         { _id: user._id },
         'some-secret-key',
@@ -94,17 +94,18 @@ module.exports.login = (req, res) => {
       // вернём токен
       res.send({ token });
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch(next);
 };
 
 // Контроллер для получения информации о текущем пользователе
-module.exports.getCurrentUser = (req, res) => {
+module.exports.getCurrentUser = (req, res, next) => {
   const userId = req.user._id;
   User.findById(userId)
-    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
-    .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
+    .then((user) => {
+      if (!user) {
+        throw new utils.NotFoundError('Пользователь не найден.');
+      }
+      res.status(utils.CREATE_SUCCESS).send(user);
+    })
+    .catch(next);
 };

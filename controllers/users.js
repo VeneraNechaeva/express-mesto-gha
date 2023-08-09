@@ -8,14 +8,6 @@ const utils = require('../utils/utils');
 
 const User = require('../models/user');
 
-// // Словарь описания ошибок
-// const errMessgesDict = {
-//   [utils.ERROR_INCORRECT_DATA]: 'Переданы некорректные данные.',
-//   [utils.ERROR_NOT_FOUND]: 'Пользователь не найден.',
-//   [utils.ERROR_DEFAULT]: 'На сервере произошла ошибка.',
-//   [utils.ERROR_INCORRECT_LOGIN_OR_PASSWORD]: 'Неверный логин или пароль.',
-// };
-
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {

@@ -15,6 +15,9 @@ const auth = require('./middlewares/auth');
 
 const utils = require('./utils/utils');
 
+// Импорт валидаторов запросов
+const { loginValidator, createUserValidator } = require('./validators/user_validator');
+
 // Импортируем роутеры
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
@@ -31,8 +34,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Роуты для логина и регистрации
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', loginValidator, login);
+app.post('/signup', createUserValidator, createUser);
 
 // Авторизация (Защищаем роуты авторизацией)
 app.use(auth);

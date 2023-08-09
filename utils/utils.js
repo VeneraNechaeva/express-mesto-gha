@@ -34,14 +34,14 @@ class IncorrectAuthorizationError extends Error {
 class DeleteCardError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 403; // Попытка удалить чужую карточку
+    this.statusCode = ERROR_DELETE_CARD; // Попытка удалить чужую карточку
   }
 }
 
-class existsEmailError extends Error {
+class ExistsEmailError extends Error {
   constructor(message) {
     super(message);
-    this.statusCode = 409; // При регистрации указан email, который уже существует на сервере.
+    this.statusCode = ERROR_EXISTS_EMAIL;
   }
 }
 
@@ -83,7 +83,7 @@ module.exports = {
   NotFoundError,
   IncorrectAuthorizationError,
   DeleteCardError,
-  existsEmailError,
+  ExistsEmailError,
   checkIncorrectPath,
   checkNonEmptyData,
   processError,

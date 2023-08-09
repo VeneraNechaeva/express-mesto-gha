@@ -15,16 +15,16 @@ module.exports.getUserByIdValidator = celebrate({
 
 module.exports.updateUserValidator = celebrate({
   body: Joi.object().keys({
-    userId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
+    user: Joi.object().keys({ _id: Joi.string().required().pattern(/^[a-f\d]{24}$/) }),
   }),
 });
 
 module.exports.updateUserAvatarValidator = celebrate({
   body: Joi.object().keys({
-    userId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
     avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
+    user: Joi.object().keys({ _id: Joi.string().required().pattern(/^[a-f\d]{24}$/) }),
   }),
 });
 

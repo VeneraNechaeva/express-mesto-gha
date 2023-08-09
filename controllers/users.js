@@ -45,7 +45,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new utils.ERROR_EXISTS_EMAIL('С таким email пользователь уже существует.');
+        throw new utils.ExistsEmailError('С таким email пользователь уже существует.');
       }
     }).then(() => {
       // Хешируем пароль
@@ -55,7 +55,7 @@ module.exports.createUser = (req, res, next) => {
         }))
         .then((user) => {
           // eslint-disable-next-line no-param-reassign
-          delete user.password;
+          user.password = undefined;
           res.status(utils.CREATE_SUCCESS).send({ data: user });
         });
     })

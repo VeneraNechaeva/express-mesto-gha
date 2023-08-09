@@ -1,6 +1,5 @@
 // Защита роутов авторизацией (Авторизационный мидлвэр)
 const jwt = require('jsonwebtoken');
-
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок

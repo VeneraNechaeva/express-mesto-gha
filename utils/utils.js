@@ -5,9 +5,6 @@ const ERROR_DEFAULT = 500;
 const CREATE_SUCCESS = 201;
 const ERROR_INCORRECT_LOGIN_OR_PASSWORD = 401;
 
-
-
-
 // Словарь соответствия ошибок и кодов по умолчанию
 const defaultErrNameToCodeDict = {
   CastError: ERROR_NOT_FOUND,

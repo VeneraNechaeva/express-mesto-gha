@@ -12,6 +12,7 @@ const bodyParser = require('body-parser');
 // Импорт библиотеки helmet для защиты приложения  Node.js от
 // уязвимостей и кибератак
 const helmet = require('helmet');
+const { celebrate, Joi } = require('celebrate');
 
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -27,7 +28,6 @@ const routerCard = require('./routes/cards');
 
 // Слушаем 3000 порт
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
-
 // Cоздание приложения методом express
 const app = express();
 
@@ -40,11 +40,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signin', loginValidator, login);
 app.post('/signup', createUserValidator, createUser);
 
+// Валидация авторизации
+app.use(celebrate({
+  headers: Joi.object().keys({
+    authorization: Joi.string().required(),
+  }).unknown(true),
+}));
+
 // Авторизация (Защищаем роуты авторизацией)
 app.use(auth);
 
 app.use('/', routerUser); // запускаем
 app.use('/', routerCard); // запускаем
+
 app.use(utils.checkIncorrectPath); // запускаем обработку неправильного пути
 
 // Обработчик ошибок celebrate
@@ -55,13 +63,13 @@ app.use(errors());
 app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
-
+  console.log(err);
   res
     .status(statusCode)
     .send({
       // проверяем статус и выставляем сообщение в зависимости от него
       message: statusCode === 500
-        ? 'На сервере произошла ошибка'
+        ? 'На сервере произошла ошибка 2'
         : message,
     });
 });

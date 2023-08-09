@@ -7,11 +7,11 @@ const {
 
 // Импорт валидаторов запросов
 const {
-  getCardsValidator, createCardValidator, deleteCardValidator,
+  createCardValidator, deleteCardValidator,
   likeCardValidator, dislikeCardValidator,
 } = require('../validators/card_validator');
 
-router.get('/cards', getCardsValidator, getCards);
+router.get('/cards', getCards);
 
 router.post('/cards', createCardValidator, createCard);
 

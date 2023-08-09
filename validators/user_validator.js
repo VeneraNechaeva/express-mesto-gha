@@ -5,10 +5,6 @@ module.exports.getCurrentUserValidator = celebrate({
   body: Joi.object().keys({
     _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
   }),
-
-  headers: Joi.object().keys({
-    authorization: Joi.string().required().pattern,
-  }).unknown(true),
 });
 
 module.exports.getUsersValidator = celebrate({
@@ -21,10 +17,6 @@ module.exports.getUserByIdValidator = celebrate({
   params: Joi.object().keys({
     _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
   }),
-
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
 });
 
 module.exports.updateUserValidator = celebrate({
@@ -33,10 +25,6 @@ module.exports.updateUserValidator = celebrate({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
   }),
-
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
 });
 
 module.exports.updateUserAvatarValidator = celebrate({
@@ -44,10 +32,6 @@ module.exports.updateUserAvatarValidator = celebrate({
     _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
     avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
   }),
-
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
 });
 
 module.exports.loginValidator = celebrate({

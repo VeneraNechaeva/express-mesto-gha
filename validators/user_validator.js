@@ -1,16 +1,5 @@
-// // // Импорт иблиотеки для валидации данных запроса
+// Импорт иблиотеки для валидации данных запроса
 const { celebrate, Joi } = require('celebrate');
-
-// const celebrate = celebrate(
-//   {
-//     body: Joi.object().keys({
-//       name: Joi.string().min(2).max(30),
-//       about: Joi.string().min(2).max(30),
-//       avatar: Joi.string().pattern(new RegExp(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/gi)),
-//       email: Joi.string().required().email(),
-//       password: Joi.string().required().min(8),
-//     })
-//   });
 
 module.exports.getCurrentUserValidator = celebrate({
   body: Joi.object().keys({
@@ -30,7 +19,7 @@ module.exports.getUsersValidator = celebrate({
 
 module.exports.getUserByIdValidator = celebrate({
   params: Joi.object().keys({
-    _id: Joi.string().required().min(24).max(24),
+    _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
   }),
 
   headers: Joi.object().keys({
@@ -64,7 +53,7 @@ module.exports.updateUserAvatarValidator = celebrate({
 module.exports.loginValidator = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required().min(8).max(20),
   }),
 });
 
@@ -74,6 +63,6 @@ module.exports.createUserValidator = celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required().min(8).max(20),
   }),
 });

@@ -22,17 +22,27 @@ const errNameToCodeDict = {
   ValidationError: utils.ERROR_NOT_FOUND,
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
+  // User.find({})
+  //   .then((users) => res.send({ data: users }))
+  //   .catch((err) => utils.processError(err, res, errMessgesDict));
   User.find({})
-    .then((users) => res.send({ data: users }))
-    .catch((err) => utils.processError(err, res, errMessgesDict));
+    .then((users) => {
+      res.send({ data: users });
+    })
+    .catch(next);
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
-    .then((user) => utils.checkNonEmptyData(user, res, errMessgesDict))
-    .catch((err) => utils.processError(err, res, errMessgesDict, errNameToCodeDict));
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Нет пользователя с таким id');
+      }
+      res.send(user);
+    })
+    .catch(next);
 };
 
 module.exports.createUser = (req, res) => {

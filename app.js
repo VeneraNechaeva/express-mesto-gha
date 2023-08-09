@@ -4,6 +4,9 @@ const express = require('express');
 // Подключаем mongoose
 const mongoose = require('mongoose');
 
+// Импорт обработчика ошибок celebrate
+const { errors } = require('celebrate');
+
 const bodyParser = require('body-parser');
 
 // Импорт библиотеки helmet для защиты приложения  Node.js от
@@ -18,7 +21,7 @@ const utils = require('./utils/utils');
 // Импорт валидаторов запросов
 const { loginValidator, createUserValidator } = require('./validators/user_validator');
 
-// Импортируем роутеры
+// Импортируем роуты
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
 
@@ -43,6 +46,25 @@ app.use(auth);
 app.use('/', routerUser); // запускаем
 app.use('/', routerCard); // запускаем
 app.use(utils.checkIncorrectPath); // запускаем обработку неправильного пути
+
+// Обработчик ошибок celebrate
+app.use(errors());
+
+// Централизованная обработка ошибок
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  // если у ошибки нет статуса, выставляем 500
+  const { statusCode = 500, message } = err;
+
+  res
+    .status(statusCode)
+    .send({
+      // проверяем статус и выставляем сообщение в зависимости от него
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message,
+    });
+});
 
 // Подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {

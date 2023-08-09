@@ -47,10 +47,10 @@ module.exports.deleteCard = (req, res) => {
 
 /// /// ///
 module.exports.likeCard = (req, res) => {
-  const { owner } = req.body;
+  const userId = req.user._id;
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $addToSet: { likes: owner } }, // добавить _id в массив, если его там нет
+    { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
     { new: true },
   )
     .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict))
@@ -58,10 +58,10 @@ module.exports.likeCard = (req, res) => {
 };
 
 module.exports.dislikeCard = (req, res) => {
-  const { owner } = req.body;
+  const userId = req.user._id;
   Card.findByIdAndUpdate(
     req.params.cardId,
-    { $pull: { likes: owner } }, // убрать _id из массива
+    { $pull: { likes: userId } }, // убрать _id из массива
     { new: true },
   )
     .then((card) => utils.checkNonEmptyData(card, res, errMessgesDict))

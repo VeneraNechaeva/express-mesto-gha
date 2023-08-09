@@ -7,14 +7,14 @@ const {
 
 // Импорт валидаторов запросов
 const {
-  getCurrentUserValidator, getUsersValidator, getUserByIdValidator,
+  getCurrentUserValidator, getUserByIdValidator,
   updateUserValidator, updateUserAvatarValidator,
 } = require('../validators/user_validator');
 
 /// /// /// Роут для получения информации о текущем пользователе
 router.get('/users/me', getCurrentUserValidator, getCurrentUser);
 
-router.get('/users', getUsersValidator, getUsers);
+router.get('/users', getUsers);
 
 router.get('/users/:userId', getUserByIdValidator, getUserById);
 

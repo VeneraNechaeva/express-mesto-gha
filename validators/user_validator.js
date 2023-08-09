@@ -7,12 +7,6 @@ module.exports.getCurrentUserValidator = celebrate({
   }),
 });
 
-module.exports.getUsersValidator = celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.string().required(),
-  }).unknown(true),
-});
-
 module.exports.getUserByIdValidator = celebrate({
   params: Joi.object().keys({
     _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),

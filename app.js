@@ -56,13 +56,17 @@ app.use(errors());
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
+  let { statusCode = utils.ERROR_DEFAULT, message } = err;
+  if (err.code === 11000) {
+    statusCode = utils.ERROR_EXISTS_EMAIL;
+    message = 'С таким email пользователь уже существует.';
+  }
   console.log(err);
   res
     .status(statusCode)
     .send({
       // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
+      message: statusCode === utils.ERROR_DEFAULT
         ? 'На сервере произошла ошибка'
         : message,
     });

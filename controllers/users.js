@@ -34,22 +34,34 @@ module.exports.createUser = (req, res, next) => {
   } = req.body;
 
   // Проверяем существует ли пользователь с таким email
-  User.findOne({ email })
+  // User.findOne({ email })
+  //   .then((user) => {
+  //     if (user) {
+  //       throw new utils.ExistsEmailError('С таким email пользователь уже существует.');
+  //     }
+  //   })
+  //   .then(() => {
+  //     // Хешируем пароль
+  //     bcrypt.hash(password, 10)
+  //       .then((hash) => User.create({
+  //         name, about, avatar, email, password: hash, // записываем хеш в базу
+  //       }))
+  //       .then((user) => {
+  //         // eslint-disable-next-line no-param-reassign
+  //         user.password = undefined;
+  //         res.status(utils.CREATE_SUCCESS).send({ data: user });
+  //       });
+  //   })
+  //   .catch(next);
+
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      name, about, avatar, email, password: hash, // записываем хеш в базу
+    }))
     .then((user) => {
-      if (user) {
-        throw new utils.ExistsEmailError('С таким email пользователь уже существует.');
-      }
-    }).then(() => {
-      // Хешируем пароль
-      bcrypt.hash(password, 10)
-        .then((hash) => User.create({
-          name, about, avatar, email, password: hash, // записываем хеш в базу
-        }))
-        .then((user) => {
-          // eslint-disable-next-line no-param-reassign
-          user.password = undefined;
-          res.status(utils.CREATE_SUCCESS).send({ data: user });
-        });
+      // eslint-disable-next-line no-param-reassign
+      user.password = undefined;
+      res.status(utils.CREATE_SUCCESS).send({ data: user });
     })
     .catch(next);
 };

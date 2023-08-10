@@ -79,7 +79,7 @@ module.exports.login = (req, res, next) => {
   User.findUserByCredentials(email, password)
     .then((user) => {
       if (!user) {
-        throw new utils.IncorrectAuthorizationError(' Передан неверный логин или пароль.');
+        throw new utils.IncorrectAuthorizationError('Передан неверный логин или пароль.');
       }
       // создадим токен
       const token = jwt.sign(

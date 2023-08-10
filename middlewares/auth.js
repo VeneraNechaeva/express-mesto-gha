@@ -2,8 +2,8 @@
 const jwt = require('jsonwebtoken');
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
-  // достаём авторизационный заголовок
-  const { authorization } = req.headers;
+  // достаём токен из Куки
+  const { authorization } = req.cookies.token;
   // убеждаемся, что он есть или начинается с Bearer
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res

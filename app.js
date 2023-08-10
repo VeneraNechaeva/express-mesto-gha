@@ -7,6 +7,16 @@ const mongoose = require('mongoose');
 // Подключаем модуль cookie-parser, что бы извлечь данные из заголовка Cookie
 const cookieParser = require('cookie-parser');
 
+// Подключаем лимитер запросов ( для ограничения количества запросов )
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 // Импорт обработчика ошибок celebrate
 const { errors } = require('celebrate');
 
@@ -37,6 +47,8 @@ const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.en
 const app = express();
 
 app.use(cookieParser()); // подключаем парсер кук как мидлвэр
+
+app.use(limiter); // применяем limiter для ограничения скорости ко всем запросам
 
 app.use(helmet());
 

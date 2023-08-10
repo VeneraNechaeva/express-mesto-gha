@@ -52,7 +52,7 @@ const checkIncorrectPath = (req, res, next) => {
 };
 
 // // Регулярное выражение для валидации ссылки
-// const validateLink =
+// const validateLink = /https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/;
 
 module.exports = {
   IncorrectDataError,
@@ -68,4 +68,5 @@ module.exports = {
   ERROR_INCORRECT_LOGIN_OR_PASSWORD,
   ERROR_DELETE_CARD,
   ERROR_EXISTS_EMAIL,
+  // validateLink,
 };

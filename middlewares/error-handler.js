@@ -22,11 +22,4 @@ const errorHandler = (err, req, res, next) => {
     });
 };
 
-const errorHandlerUserExists = (err, req, res, next) => {
-  if (err.code === 11000) {
-    next(new utils.ExistsEmailError('Пользователь с таким email  уже существует.'));
-  }
-  next();
-};
-
-module.exports = { errorHandler, errorHandlerUserExists };
+module.exports = { errorHandler };

@@ -8,8 +8,6 @@ const utils = require('../utils/utils');
 
 const User = require('../models/user');
 
-const { errorHandlerUserExists } = require('../middlewares/error-handler');
-
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
@@ -44,7 +42,12 @@ module.exports.createUser = (req, res, next) => {
       user.password = undefined;
       res.status(utils.CREATE_SUCCESS).send({ data: user });
     })
-    .catch(errorHandlerUserExists);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new utils.ExistsEmailError('Пользователь с таким email  уже существует.'));
+      }
+      next();
+    });
 };
 
 /// /// ///

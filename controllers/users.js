@@ -94,6 +94,8 @@ module.exports.login = (req, res, next) => {
         httpOnly: true,
         sameSite: true,
       }).end();
+
+      res.send({ token });
     })
     .catch(next);
 };

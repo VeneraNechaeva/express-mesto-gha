@@ -40,17 +40,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signin', loginValidator, login);
 app.post('/signup', createUserValidator, createUser);
 
-// // Валидация авторизации
-// app.use(celebrate({
-//   headers: Joi.object().keys({
-//     authorization: Joi.string()
-//       // .message('wwwwww')
-//       // .error(utils.IncorrectAuthorizationError)
-//       // eslint-disable-next-line arrow-parens
-//       .required().error(new utils.IncorrectAuthorizationError('')),
-//   }).unknown(true),
-// }));
-
 // Авторизация (Защищаем роуты авторизацией)
 app.use(auth);
 
@@ -61,6 +50,7 @@ app.use(utils.checkIncorrectPath); // запускаем обработку не
 
 // Обработчик ошибок celebrate
 app.use(errors());
+
 // ////////////////////////////////////////////////////////////////////////////
 // Централизованная обработка ошибок
 // eslint-disable-next-line no-unused-vars

@@ -4,6 +4,9 @@ const express = require('express');
 // Подключаем mongoose
 const mongoose = require('mongoose');
 
+// Подключаем модуль cookie-parser, что бы извлечь данные из заголовка Cookie
+const cookieParser = require('cookie-parser');
+
 // Импорт обработчика ошибок celebrate
 const { errors } = require('celebrate');
 
@@ -12,7 +15,6 @@ const bodyParser = require('body-parser');
 // Импорт библиотеки helmet для защиты приложения  Node.js от
 // уязвимостей и кибератак
 const helmet = require('helmet');
-// const { celebrate, Joi } = require('celebrate');
 
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
@@ -30,6 +32,8 @@ const routerCard = require('./routes/cards');
 const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 // Cоздание приложения методом express
 const app = express();
+
+app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
 app.use(helmet());
 
@@ -57,9 +61,10 @@ app.use(errors());
 app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   let { statusCode = utils.ERROR_DEFAULT, message } = err;
+  // если такой email уже есть в базе, тогда статус 409
   if (err.code === 11000) {
     statusCode = utils.ERROR_EXISTS_EMAIL;
-    message = 'С таким email пользователь уже существует.';
+    message = 'Пользователь с таким email  уже существует.';
   }
   console.log(err);
   res

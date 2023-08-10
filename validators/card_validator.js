@@ -12,20 +12,20 @@ module.exports.createCardValidator = celebrate({
 /// /// ///
 module.exports.deleteCardValidator = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 });
 
 /// /// ///
 module.exports.likeCardValidator = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 });
 
 /// /// ///
 module.exports.dislikeCardValidator = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 });

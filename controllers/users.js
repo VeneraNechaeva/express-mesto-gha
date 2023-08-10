@@ -8,6 +8,8 @@ const utils = require('../utils/utils');
 
 const User = require('../models/user');
 
+const { errorHandlerUserExists } = require('../middlewares/error-handler');
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
@@ -42,7 +44,7 @@ module.exports.createUser = (req, res, next) => {
       user.password = undefined;
       res.status(utils.CREATE_SUCCESS).send({ data: user });
     })
-    .catch(next);
+    .catch(errorHandlerUserExists);
 };
 
 /// /// ///

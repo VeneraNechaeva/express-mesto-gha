@@ -3,13 +3,13 @@ const { celebrate, Joi } = require('celebrate');
 
 module.exports.getCurrentUserValidator = celebrate({
   body: Joi.object().keys({
-    _id: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    _id: Joi.string().length(24).hex().required(),
   }),
 });
 
 module.exports.getUserByIdValidator = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().required().pattern(/^[a-f\d]{24}$/),
+    userId: Joi.string().length(24).hex().required(),
   }),
 });
 
@@ -17,14 +17,14 @@ module.exports.updateUserValidator = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    user: Joi.object().keys({ _id: Joi.string().required().pattern(/^[a-f\d]{24}$/) }),
+    user: Joi.object().keys({ _id: Joi.string().length(24).hex().required() }),
   }),
 });
 
 module.exports.updateUserAvatarValidator = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().pattern(/https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=]+$/),
-    user: Joi.object().keys({ _id: Joi.string().required().pattern(/^[a-f\d]{24}$/) }),
+    user: Joi.object().keys({ _id: Joi.string().length(24).hex().required() }),
   }),
 });
 

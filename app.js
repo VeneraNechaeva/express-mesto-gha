@@ -33,8 +33,6 @@ const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.en
 // Cоздание приложения методом express
 const app = express();
 
-app.use(cookieParser()); // подключаем парсер кук как мидлвэр
-
 app.use(helmet());
 
 app.use(bodyParser.json());
@@ -43,6 +41,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Роуты для логина и регистрации
 app.post('/signin', loginValidator, login);
 app.post('/signup', createUserValidator, createUser);
+
+app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
 // Авторизация (Защищаем роуты авторизацией)
 app.use(auth);

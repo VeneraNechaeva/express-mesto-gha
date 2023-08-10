@@ -88,9 +88,9 @@ module.exports.login = (req, res, next) => {
         { expiresIn: '7d' }, // токен будет просрочен через неделю
       );
 
-      // вернём токен
+      // вернём токен исохраним в куки
       res.cookie('jwt', token, {
-        maxAge: 3600000,
+        maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: true,
       }).end();

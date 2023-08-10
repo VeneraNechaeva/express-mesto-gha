@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(jwtToken, 'some-secret-key');
   } catch (err) {
     // отправим ошибку, если не получилось
-    return res.status(utils.IncorrectAuthorizationError).send({ message: 'Необходима авторизация' });
+    return res.status(utils.ERROR_INCORRECT_LOGIN_OR_PASSWORD).send({ message: 'Необходима авторизация' });
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса

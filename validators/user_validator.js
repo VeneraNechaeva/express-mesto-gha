@@ -30,7 +30,7 @@ module.exports.updateUserAvatarValidator = celebrate({
 
 module.exports.loginValidator = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    email: Joi.string().required().email().unique(true),
     password: Joi.string().required(),
   }),
 });

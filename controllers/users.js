@@ -88,11 +88,12 @@ module.exports.login = (req, res, next) => {
         { expiresIn: '7d' }, // токен будет просрочен через неделю
       );
 
-      // вернём токен исохраним в куки
+      // сохраним токен в куки
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: true,
+        // вернем токен
       }).send({ token });
     })
     .catch(next);

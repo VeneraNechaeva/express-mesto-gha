@@ -47,8 +47,7 @@ class ExistsEmailError extends Error {
 
 // Обработка неправильного пути
 const checkIncorrectPath = (req, res, next) => {
-  res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена!' });
-  next();
+  next(new NotFoundError('Страница не найдена!'));
 };
 
 // Регулярное выражение для валидации ссылки

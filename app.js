@@ -7,16 +7,6 @@ const mongoose = require('mongoose');
 // Подключаем модуль cookie-parser, что бы извлечь данные из заголовка Cookie
 const cookieParser = require('cookie-parser');
 
-// Подключаем лимитер запросов ( для ограничения количества запросов )
-const rateLimit = require('express-rate-limit');
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
 // Импорт обработчика ошибок celebrate
 const { errors } = require('celebrate');
 
@@ -25,6 +15,9 @@ const bodyParser = require('body-parser');
 // Импорт библиотеки helmet для защиты приложения  Node.js от
 // уязвимостей и кибератак
 const helmet = require('helmet');
+
+// Подключаем лимитер запросов ( для ограничения количества запросов )
+const limiter = require('./utils/limiter');
 
 // Импорт централизованного обработка ошибок
 const { errorHandler } = require('./middlewares/error-handler');

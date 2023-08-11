@@ -8,15 +8,16 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 
 // Подключаем лимитер запросов ( для ограничения количества запросов )
-const rateLimit = require('express-rate-limit');
+// const rateLimit = require('express-rate-limit');
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  // standardHeaders: true,
-  // legacyHeaders: false,
-  massage: 'В настоящий момент превышено количество запросов на сервер. Пожалуйста повторите позже. Спасибо.',
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000,
+//   max: 100,
+//   // standardHeaders: true,
+//   // legacyHeaders: false,
+//   massage: 'В настоящий момент превышено количество запросов на сервер.
+// Пожалуйста повторите позже. Спасибо.',
+// });
 
 // Импорт обработчика ошибок celebrate
 const { errors } = require('celebrate');
@@ -37,6 +38,11 @@ const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
 const utils = require('./utils/utils');
+
+/// ///////////////////////////////////////////////////////////////////////////////////////////
+// Подключаем лимитер запросов ( для ограничения количества запросов )
+const limiter = require('./utils/limiter');
+/// //////////////////////////////////////////////////////////////////////////////////////////
 
 // Импорт валидаторов запросов
 const { loginValidator, createUserValidator } = require('./validators/user_validator');

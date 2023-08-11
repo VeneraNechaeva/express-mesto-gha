@@ -14,7 +14,7 @@ module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(utils.CREATE_SUCCESS).send({ data: card }))
     .catch(next);
 };
 
@@ -29,7 +29,7 @@ module.exports.deleteCard = (req, res, next) => {
         throw new utils.NotFoundError('Карточка не найден.');
       }
       if (card.owner.toString() === userId) {
-        Card.findByIdAndRemove(cardId)
+        Card.deleteOne(card)
           .then((cardAfterDel) => res.send(cardAfterDel))
           .catch((err) => Promise.reject(err));
       } else {

@@ -16,6 +16,12 @@ const bodyParser = require('body-parser');
 // уязвимостей и кибератак
 const helmet = require('helmet');
 
+// Подключаем лимитер запросов ( для ограничения количества запросов )
+const { limiter } = require('./utils/limiter');
+
+// Импорт централизованного обработка ошибок
+const { errorHandler } = require('./middlewares/error-handler');
+
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 
@@ -34,6 +40,8 @@ const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.en
 const app = express();
 
 app.use(cookieParser()); // подключаем парсер кук как мидлвэр
+
+app.use(limiter); // применяем limiter для ограничения скорости ко всем запросам
 
 app.use(helmet());
 
@@ -55,27 +63,8 @@ app.use(utils.checkIncorrectPath); // запускаем обработку не
 // Обработчик ошибок celebrate
 app.use(errors());
 
-// ////////////////////////////////////////////////////////////////////////////
-// Централизованная обработка ошибок
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  let { statusCode = utils.ERROR_DEFAULT, message } = err;
-  // если такой email уже есть в базе, тогда статус 409
-  if (err.code === 11000) {
-    statusCode = utils.ERROR_EXISTS_EMAIL;
-    message = 'Пользователь с таким email  уже существует.';
-  }
-  console.log(err);
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === utils.ERROR_DEFAULT
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-});
+// Подключаем централизованный обработчик ошибок
+app.use(errorHandler);
 
 // Подключаемся к серверу mongo
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {

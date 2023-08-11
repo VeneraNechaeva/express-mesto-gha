@@ -1,5 +1,8 @@
 // Защита роутов авторизацией (Авторизационный мидлвэр)
 const jwt = require('jsonwebtoken');
+
+const utils = require('../utils/utils');
+
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   // достаём токен из Куки
@@ -12,9 +15,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(jwtToken, 'some-secret-key');
   } catch (err) {
     // отправим ошибку, если не получилось
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    return res.status(utils.ERROR_INCORRECT_LOGIN_OR_PASSWORD).send({ message: 'Необходима авторизация' });
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса

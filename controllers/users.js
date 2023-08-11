@@ -42,7 +42,12 @@ module.exports.createUser = (req, res, next) => {
       user.password = undefined;
       res.status(utils.CREATE_SUCCESS).send({ data: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.code === 11000) {
+        next(new utils.ExistsEmailError('Пользователь с таким email  уже существует.'));
+      }
+      next();
+    });
 };
 
 /// /// ///

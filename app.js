@@ -7,6 +7,17 @@ const mongoose = require('mongoose');
 // Подключаем модуль cookie-parser, что бы извлечь данные из заголовка Cookie
 const cookieParser = require('cookie-parser');
 
+// Подключаем лимитер запросов ( для ограничения количества запросов )
+const rateLimit = require('express-rate-limit');
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  // standardHeaders: true,
+  // legacyHeaders: false,
+  massage: 'В настоящий момент превышено количество запросов на сервер. Пожалуйста повторите позже. Спасибо.',
+});
+
 // Импорт обработчика ошибок celebrate
 const { errors } = require('celebrate');
 
@@ -17,7 +28,7 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
 // Подключаем лимитер запросов ( для ограничения количества запросов )
-const limiter = require('./utils/limiter');
+// const limiter = require('./utils/limiter');
 
 // Импорт централизованного обработка ошибок
 const { errorHandler } = require('./middlewares/error-handler');
@@ -39,9 +50,9 @@ const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.en
 // Cоздание приложения методом express
 const app = express();
 
-app.use(limiter); // применяем limiter для ограничения скорости ко всем запросам
-
 app.use(cookieParser()); // подключаем парсер кук как мидлвэр
+
+app.use(limiter); // применяем limiter для ограничения скорости ко всем запросам
 
 app.use(helmet());
 

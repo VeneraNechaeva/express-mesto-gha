@@ -39,9 +39,9 @@ const { PORT = 3000, DB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.en
 // Cоздание приложения методом express
 const app = express();
 
-app.use(cookieParser()); // подключаем парсер кук как мидлвэр
-
 app.use(limiter); // применяем limiter для ограничения скорости ко всем запросам
+
+app.use(cookieParser()); // подключаем парсер кук как мидлвэр
 
 app.use(helmet());
 
